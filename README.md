@@ -4,9 +4,10 @@
 # Features
 
 * Kade engine look like hud
-* New option (Light Opponent Arrows)
+* Option to toggle lighting cpu strums
 * Kade engine freeplay
 * Kade Timebar
+* MS display from kade
 
 # Installation:
 
