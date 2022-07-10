@@ -50,7 +50,7 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 		addOption(option);
 		
 		//I'd suggest using "Nothing" as an example for making your own option since it is the simplest here
-		var option:Option = new Option('Downscroll', //Name
+		var option:Option = new Option('Song Position', //Name
 			'If checked, song position will be visible like in kade', //Description
 			'songPosition', //Save data variable name
 			'bool', //Variable type

@@ -41,8 +41,11 @@ class MainMenuState extends MusicBeatState
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
 	var camFollowPos:FlxObject;
+	public static var finishedFunnyMove:Bool = false;
 	var debugKeys:Array<FlxKey>;
 
+	public static var firstStart:Bool = true;
+	
 	var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
 
 	override function create()
@@ -103,8 +106,7 @@ class MainMenuState extends MusicBeatState
 
 		for (i in 0...optionShit.length)
 		{
-			var offset:Float = 108 - (Math.max(optionShit.length, 4) - 4) * 80;
-			var menuItem:FlxSprite = new FlxSprite(0, (i * 140)  + offset);
+			var menuItem:FlxSprite = new FlxSprite(0, FlxG.height * 1.6);
 			menuItem.scale.x = scale;
 			menuItem.scale.y = scale;
 			menuItem.frames = Paths.getSparrowAtlas('mainmenu/menu_' + optionShit[i]);
@@ -114,23 +116,25 @@ class MainMenuState extends MusicBeatState
 			menuItem.ID = i;
 			menuItem.screenCenter(X);
 			menuItems.add(menuItem);
-			var scr:Float = (optionShit.length - 4) * 0.135;
-			if(optionShit.length < 6) scr = 0;
-			menuItem.scrollFactor.set(0, scr);
-			menuItem.antialiasing = ClientPrefs.globalAntialiasing;
-			//menuItem.setGraphicSize(Std.int(menuItem.width * 0.58));
-			menuItem.updateHitbox();
+			menuItem.scrollFactor.set();
+			menuItem.antialiasing = true;
+			if (firstStart)
+				FlxTween.tween(menuItem,{y: 60 + (i * 160)},1 + (i * 0.25) ,{ease: FlxEase.expoInOut, onComplete: function(flxTween:FlxTween) 
+					{ 
+						finishedFunnyMove = true; 
+						changeItem();
+					}});
+			else
+				menuItem.y = 60 + (i * 160);
 		}
 
+		firstStart = false;
+		
 		FlxG.camera.follow(camFollowPos, null, 1);
 
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 47, 0, "KadSych Engine v" + kadSychEngineVersion + "", 12);
+		var versionShit:FlxText = new FlxText(5, FlxG.height - 18, 0, "0.2.7.1 FNF - " + kadSychEngineVersion + " KadSych Engine", 12);
 		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(versionShit);
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 24, 0, "Friday Night Funkin' v" + Application.current.meta.get('version'), 12);
-		versionShit.scrollFactor.set();
-		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
 		// NG.core.calls.event.logEvent('swag').send();
@@ -212,12 +216,7 @@ class MainMenuState extends MusicBeatState
 					{
 						if (curSelected != spr.ID)
 						{
-							FlxTween.tween(FlxG.camera, {zoom: 5}, 0.8, {ease: FlxEase.expoIn});
-							FlxTween.tween(bg, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
-							FlxTween.tween(magenta, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
-							FlxTween.tween(bg, {alpha: 0}, 0.8, {ease: FlxEase.expoIn});
-							FlxTween.tween(magenta, {alpha: 0}, 0.8, {ease: FlxEase.expoIn});
-							FlxTween.tween(spr, {alpha: 0}, 0.4, {
+							FlxTween.tween(spr, {alpha: 0}, 1.3, {
 								ease: FlxEase.quadOut,
 								onComplete: function(twn:FlxTween)
 								{
@@ -264,28 +263,27 @@ class MainMenuState extends MusicBeatState
 
 	function changeItem(huh:Int = 0)
 	{
-		curSelected += huh;
+		if (finishedFunnyMove)
+		{
+			curSelected += huh;
 
-		if (curSelected >= menuItems.length)
-			curSelected = 0;
-		if (curSelected < 0)
-			curSelected = menuItems.length - 1;
-
+			if (curSelected >= menuItems.length)
+				curSelected = 0;
+			if (curSelected < 0)
+				curSelected = menuItems.length - 1;
+		}
 		menuItems.forEach(function(spr:FlxSprite)
 		{
 			spr.animation.play('idle');
 			spr.updateHitbox();
 
-			if (spr.ID == curSelected)
+			if (spr.ID == curSelected && finishedFunnyMove)
 			{
 				spr.animation.play('selected');
-				var add:Float = 0;
-				if(menuItems.length > 4) {
-					add = menuItems.length * 8;
-				}
-				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y - add);
-				spr.centerOffsets();
+				camFollow.setPosition(spr.getGraphicMidpoint().x, spr.getGraphicMidpoint().y);
 			}
+
+			spr.updateHitbox();
 		});
 	}
 

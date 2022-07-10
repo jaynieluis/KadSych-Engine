@@ -911,6 +911,7 @@ class PlayState extends MusicBeatState
 
 		strumLine = new FlxSprite(ClientPrefs.middleScroll ? STRUM_X_MIDDLESCROLL : STRUM_X, 50).makeGraphic(FlxG.width, 10);
 		if(ClientPrefs.downScroll) strumLine.y = FlxG.height - 150;
+		strumLine.x = FlxG.width - 50;
 		strumLine.scrollFactor.set();
 
 		playerLaneUnderlay = new FlxSprite(0, 0).makeGraphic(110 * 4 + 50, FlxG.height * 2);
@@ -1063,26 +1064,23 @@ class PlayState extends MusicBeatState
 		add(iconP2);
 		reloadHealthBarColors();
 
-		scoreTxt = new FlxText(0, healthBarBG.y + 60, FlxG.width, "", 16);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt = new FlxText(FlxG.width / 2 - 235, healthBarBG.y + 60, 0, "", 16);
+		scoreTxt.x -= 20;
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
-        scoreTxt.x += 30;
-		scoreTxt.borderSize = 0.9;
-		scoreTxt.visible = !ClientPrefs.hideHud;
+		if(cpuControlled) scoreTxt.x = FlxG.width / 2 - 20;													  
 		add(scoreTxt);
 
 		versionTxt = new FlxText(0, FlxG.height - 24, 0, SONG.song + " - " +
-			CoolUtil.difficultyString() + " " +
-			" ", 16);
+			CoolUtil.difficultyString(), 16);
 		versionTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		versionTxt.scrollFactor.set();
 		versionTxt.x += 5;
 		add(versionTxt);
 
-		botplayTxt = new FlxText(400, songPosBG.y + 500, FlxG.width - 800, "BOTPLAY", 38);
-		botplayTxt.setFormat(Paths.font("vcr.ttf"), 38, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		botplayTxt = new FlxText(400, songPosBG.y + 500, FlxG.width - 800, "BOTPLAY", 42);
+		botplayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		botplayTxt.scrollFactor.set();
-		botplayTxt.borderSize = 4;
 		botplayTxt.visible = cpuControlled;
 		add(botplayTxt);
 		if(ClientPrefs.downScroll) {
@@ -1252,28 +1250,7 @@ class PlayState extends MusicBeatState
 
 	function set_songSpeed(value:Float):Float
 	{
-		if(generatedMusic)
-		{
-			var ratio:Float = value / songSpeed; //funny word huh
-			for (note in notes)
-			{
-				if(note.isSustainNote && !note.animation.curAnim.name.endsWith('end'))
-				{
-					note.scale.y *= ratio;
-					note.updateHitbox();
-				}
-			}
-			for (note in unspawnNotes)
-			{
-				if(note.isSustainNote && !note.animation.curAnim.name.endsWith('end'))
-				{
-					note.scale.y *= ratio;
-					note.updateHitbox();
-				}
-			}
-		}
 		songSpeed = value;
-		noteKillOffset = 350 / songSpeed;
 		return value;
 	}
 
@@ -1921,9 +1898,9 @@ class PlayState extends MusicBeatState
 				if(floorSus > 0) {
 					for (susNote in 0...floorSus+1)
 					{
-						oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
+					    oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
-						var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet / FlxMath.roundDecimal(songSpeed, 2)), daNoteData, oldNote, true);
+				    	var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true);
 						sustainNote.mustPress = gottaHitNote;
 						sustainNote.gfNote = (section.gfSection && (songNotes[1]<4));
 						sustainNote.noteType = swagNote.noteType;
@@ -2625,15 +2602,6 @@ class PlayState extends MusicBeatState
 					//Jesus fuck this took me so much mother fucking time AAAAAAAAAA
 					if(strumScroll && daNote.isSustainNote)
 					{
-						if (daNote.animation.curAnim.name.endsWith('end')) {
-							daNote.y += 10.5 * (fakeCrochet / 400) * 1.5 * songSpeed + (46 * (songSpeed - 1));
-							daNote.y -= 46 * (1 - (fakeCrochet / 600)) * songSpeed;
-							if(PlayState.isPixelStage) {
-								daNote.y += 8 + (6 - daNote.originalHeightForCalcs) * PlayState.daPixelZoom;
-							} else {
-								daNote.y -= 19;
-							}
-						}
 						daNote.y += (Note.swagWidth / 2) - (60.5 * (songSpeed - 1));
 						daNote.y += 27.5 * ((SONG.bpm / 100) - 1) * (songSpeed - 1);
 					}
