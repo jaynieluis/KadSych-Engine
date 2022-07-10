@@ -64,6 +64,13 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			false);
 		addOption(option);
 
+		var option:Option = new Option('Accuracy',
+			"If checked, accuracy and misses will be visible",
+			'accuracy',
+			'bool',
+			true);
+		addOption(option);
+		
 		var option:Option = new Option('Middlescroll',
 			'If checked, your notes get centered.',
 			'middleScroll',

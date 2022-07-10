@@ -1065,7 +1065,7 @@ class PlayState extends MusicBeatState
 		reloadHealthBarColors();
 
 		scoreTxt = new FlxText(FlxG.width / 2 - 235, healthBarBG.y + 60, 0, "", 16);
-		scoreTxt.x -= 20;
+		scoreTxt.x -= 40;
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		if(cpuControlled) scoreTxt.x = FlxG.width / 2 - 20;													  
@@ -2347,10 +2347,10 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		if(ratingName == 'N/A') {
-			scoreTxt.text = 'Score:' + songScore + ' | Combo Breaks:' + songMisses + ' | Accuracy:100%' + " | " + ratingName;
+		if(ClientPrefs.accuracy) {
+			scoreTxt.text = 'Score:' + songScore + ' | Combo Breaks:' + songMisses + ' | Accuracy:' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%' + ' | ' + ratingFC;
 		} else {
-			scoreTxt.text = 'Score:' + songScore + ' | Combo Breaks:' + songMisses + ' | Accuracy:' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%' + ' | ' + ratingFC;//peeps wanted no integer rating
+			scoreTxt.text = 'Score:' + songScore;
 		}
 
 		if (controls.PAUSE && startedCountdown && canPause)
