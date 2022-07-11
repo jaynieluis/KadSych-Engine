@@ -67,6 +67,8 @@ class ControlsSubState extends MusicBeatSubstate {
 	private var grpInputsAlt:Array<AttachedText> = [];
 	var rebindingKey:Bool = false;
 	var nextAccept:Int = 5;
+    var blackBorder:FlxSprite;
+	public static var versionShit:FlxText;
 
 	public function new() {
 		super();
@@ -80,6 +82,17 @@ class ControlsSubState extends MusicBeatSubstate {
 		grpOptions = new FlxTypedGroup<Alphabet>();
 		add(grpOptions);
 
+		versionShit = new FlxText(5, FlxG.height + 40, 0, "KadSych Engine " + MainMenuState.kadSychEngineVersion + " Press ENTER to change keybinds", 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		
+		blackBorder = new FlxSprite(-30,FlxG.height + 40).makeGraphic((Std.int(versionShit.width + 900)),Std.int(versionShit.height + 600),FlxColor.BLACK);
+		blackBorder.alpha = 0.5;
+
+		add(blackBorder);
+
+		add(versionShit);
+		
 		optionShit.push(['']);
 		optionShit.push([defaultKey]);
 

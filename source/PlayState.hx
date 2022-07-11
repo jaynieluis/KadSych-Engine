@@ -1065,29 +1065,29 @@ class PlayState extends MusicBeatState
 		reloadHealthBarColors();
 
 		scoreTxt = new FlxText(FlxG.width / 2 - 235, healthBarBG.y + 60, 0, "", 16);
-		scoreTxt.x -= 40;
+		if (!FlxG.save.data.accuracyDisplay) {
+			scoreTxt.x = healthBarBG.x + healthBarBG.width / 2;
+		}
+		scoreTxt.x += 30;
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
-		if(cpuControlled) scoreTxt.x = FlxG.width / 2 - 20;													  
+		scoreTxt.x = FlxG.width / 2 - 99;													  
 		add(scoreTxt);
 
 		versionTxt = new FlxText(0, FlxG.height - 24, 0, SONG.song + " - " +
 			CoolUtil.difficultyString(), 16);
 		versionTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		versionTxt.scrollFactor.set();
+		versionTxt.visible = (ClientPrefs.watermarks);
 		versionTxt.x += 5;
 		add(versionTxt);
 
-		botplayTxt = new FlxText(400, songPosBG.y + 500, FlxG.width - 800, "BOTPLAY", 42);
-		botplayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		botplayTxt.scrollFactor.set();
-		botplayTxt.visible = cpuControlled;
-		add(botplayTxt);
-		if(ClientPrefs.downScroll) {
-			botplayTxt.y = songPosBG.y - 78;
-		}
-
-
+	    botplayTxt = new FlxText(400, songPosBG.y + 500, FlxG.width - 800, "BOTPLAY", 42);
+        botplayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+    	botplayTxt.scrollFactor.set();
+	   	botplayTxt.visible = cpuControlled;
+	    add(botplayTxt);
+		
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
 		notes.cameras = [camHUD];
@@ -2692,7 +2692,7 @@ class PlayState extends MusicBeatState
 		paused = true;
 		cancelMusicFadeTween();
 		MusicBeatState.switchState(new ChartingState());
-		chartingMode = true;
+		chartingMode = false;
 
 		#if desktop
 		DiscordClient.changePresence("Chart Editor", null, null, true);

@@ -47,6 +47,27 @@ class VisualsUISubState extends BaseOptionsMenu
 			'bool',
 			true);
 		addOption(option);
+		
+		var option:Option = new Option('Song Position',
+			'If checked, song position will be visible like in kade',
+			'songPosition',
+			'bool',
+			true);
+		addOption(option);
+		
+		var option:Option = new Option('Watermarks',
+			'If unchecked, watermarks on the engine will be hidden especially the version text',
+			'watermarks',
+			'bool',
+			true);
+		addOption(option);
+		
+		var option:Option = new Option('Accuracy',
+			"If checked, accuracy and misses will be visible",
+			'accuracy',
+			'bool',
+			true);
+		addOption(option);
 
 		#if !mobile
 		var option:Option = new Option('FPS Counter',

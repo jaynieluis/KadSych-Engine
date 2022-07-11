@@ -49,26 +49,11 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			false); //Default value
 		addOption(option);
 		
-		//I'd suggest using "Nothing" as an example for making your own option since it is the simplest here
-		var option:Option = new Option('Song Position', //Name
-			'If checked, song position will be visible like in kade', //Description
-			'songPosition', //Save data variable name
-			'bool', //Variable type
-			true); //Default value
-		addOption(option);
-		
 		var option:Option = new Option('Light Opponent Arrows',
 			"If checked, opponent's arrows will glow",
 			'glow',
 			'bool',
 			false);
-		addOption(option);
-
-		var option:Option = new Option('Accuracy',
-			"If checked, accuracy and misses will be visible",
-			'accuracy',
-			'bool',
-			true);
 		addOption(option);
 		
 		var option:Option = new Option('Middlescroll',

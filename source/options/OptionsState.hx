@@ -34,6 +34,8 @@ class OptionsState extends MusicBeatState
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
 	static var goToPlayState:Bool = false;
+    var blackBorder:FlxSprite;
+	public static var versionShit:FlxText;
 
 	function openSelectedSubstate(label:String) {
 		switch(label) {
@@ -91,6 +93,17 @@ class OptionsState extends MusicBeatState
 		selectorRight = new Alphabet(0, 0, '', true, false);
 		add(selectorRight);
 
+		versionShit = new FlxText(5, FlxG.height + 40, 0, "KadSych Engine " + MainMenuState.kadSychEngineVersion, 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		
+		blackBorder = new FlxSprite(-30,FlxG.height + 40).makeGraphic((Std.int(versionShit.width + 900)),Std.int(versionShit.height + 600),FlxColor.BLACK);
+		blackBorder.alpha = 0.5;
+
+		add(blackBorder);
+
+		add(versionShit);
+		
 		changeSelection();
 		ClientPrefs.saveSettings();
 
